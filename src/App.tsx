@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import {Settings} from "./Components/Settings/Settings";
 import {Counter} from "./Components/Counter/Counter";

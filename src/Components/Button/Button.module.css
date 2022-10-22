@@ -6,4 +6,15 @@
     color: black;
     font-weight: bold;
     font-size: 2em;
+    transition-duration: 0.1s;
+    cursor: pointer;
+    border: none;
+}
+
+.button:hover {
+    background-color: #00a2cf; /* Green */
+}
+
+.button:active {
+    background-color: #007393;
 }

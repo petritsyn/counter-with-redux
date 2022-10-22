@@ -1,15 +1,18 @@
 import React, {FC} from 'react';
 import {Button} from "../Button/Button";
 import s from './Counter.module.css'
+import {useDispatch} from "react-redux";
 
 type PropsType = {
-    value: number
+    counterValue: number
 }
 
-export const Counter: FC<PropsType> = ({value}) => {
+export const Counter: FC<PropsType> = ({counterValue}) => {
+
+    let dispatch = useDispatch()
 
     const onClickInc = () => {
-        console.log('inc')
+
     }
 
     const onClickReset = () => {
@@ -18,7 +21,7 @@ export const Counter: FC<PropsType> = ({value}) => {
 
     return (
         <div className='appItem'>
-            <div className={`displayField ${s.value}`}>{value}</div>
+            <div className={`displayField ${s.value}`}>{counterValue}</div>
             <div className='buttonsField'>
                 <Button name={'inc'} onClickButtonHandler={onClickInc}/>
                 <Button name={'reset'} onClickButtonHandler={onClickReset}/>
