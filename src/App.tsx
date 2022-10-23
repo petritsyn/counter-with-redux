@@ -7,7 +7,7 @@ function App() {
     return (
         <div className="App">
             <Settings/>
-            <Counter value={0}/>
+            <Counter/>
         </div>
     );
 }

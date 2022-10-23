@@ -1,18 +1,21 @@
-import React, {FC} from 'react';
+import React, {useState} from 'react';
 import {Button} from "../Button/Button";
 import s from './Counter.module.css'
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {increaseCounterValue} from "../../redux/CounterReducer";
+import {AppRootStateType} from "../../redux/store";
 
-type PropsType = {
-    counterValue: number
-}
+export const Counter = () => {
 
-export const Counter: FC<PropsType> = ({counterValue}) => {
+    let [counter, setCounter] = useState(0)
+
+    let counterValue = useSelector<AppRootStateType, number>(state => state.counter.counterValue)
 
     let dispatch = useDispatch()
 
     const onClickInc = () => {
-
+        setCounter(counter + 1)
+        dispatch(increaseCounterValue(counter))
     }
 
     const onClickReset = () => {
