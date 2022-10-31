@@ -2,14 +2,16 @@ type InitialStateType = {
     isDisableButton: boolean
     maxValue: number
     startValue: number
+    isMessage: boolean
 }
 
-type ActionsTypes = ReturnType<typeof onMaxValueChange> | ReturnType<typeof onStartValueChange>
+type ActionsTypes = ReturnType<typeof onMaxValueChange> | ReturnType<typeof onStartValueChange> | ReturnType<typeof setValue>
 
 const initialState = {
-    isDisableButton: false,
+    isDisableButton: true,
     maxValue: 0,
-    startValue: 0
+    startValue: 0,
+    isMessage: false
 }
 
 export const SettingsReducer = (state: InitialStateType = initialState, action: ActionsTypes) => {
@@ -19,7 +21,8 @@ export const SettingsReducer = (state: InitialStateType = initialState, action: 
             return {
                 ...state,
                 maxValue: action.maxValue,
-                isDisableButton: true
+                isDisableButton: false,
+                isMessage: true
             }
         }
 
@@ -27,7 +30,16 @@ export const SettingsReducer = (state: InitialStateType = initialState, action: 
             return {
                 ...state,
                 startValue: action.startValue,
-                isDisableButton: true
+                isDisableButton: false,
+                isMessage: true
+            }
+        }
+
+        case "SET-VALUE": {
+            return {
+                ...state,
+                isDisableButton: true,
+                isMessage: false
             }
         }
 
@@ -47,5 +59,11 @@ export const onStartValueChange = (startValue: number) => {
     return {
         type: 'ON-START-VALUE-CHANGE',
         startValue
+    } as const
+}
+
+export const setValue = () => {
+    return {
+        type: 'SET-VALUE'
     } as const
 }

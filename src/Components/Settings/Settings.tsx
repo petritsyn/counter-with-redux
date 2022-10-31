@@ -3,7 +3,7 @@ import {Button} from "../Button/Button";
 import s from './Settings.module.css'
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../redux/store";
-import {onMaxValueChange, onStartValueChange} from "../../redux/SettingsReducer";
+import {onMaxValueChange, onStartValueChange, setValue} from "../../redux/SettingsReducer";
 
 export const Settings = () => {
 
@@ -14,7 +14,7 @@ export const Settings = () => {
     let dispatch = useDispatch()
 
     const onClickButtonHandler = () => {
-        console.log('set')
+        dispatch(setValue())
     }
 
     const onChangeInputMaxValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +34,7 @@ export const Settings = () => {
                 </div>
             </div>
             <div className='buttonsField'>
-                <Button name={'set'} onClickButtonHandler={onClickButtonHandler} isDisabled={!disableButton}/>
+                <Button name={'set'} onClickButtonHandler={onClickButtonHandler} isDisabled={disableButton}/>
             </div>
         </div>
     );
