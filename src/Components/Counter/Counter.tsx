@@ -1,16 +1,17 @@
-import React, {useState, FC} from 'react';
+import React, {useState} from 'react';
 import {Button} from "../Button/Button";
 import s from './Counter.module.css'
 import {useDispatch, useSelector} from "react-redux";
-import {increaseCounterValue, resetCounter} from "../../redux/CounterReducer";
+import {increaseCounterValue, resetCounter} from "../../redux/counterReducer";
 import {AppRootStateType} from "../../redux/store";
 
 export const Counter = () => {
 
-    let [counter, setCounter] = useState(0)
-
-    let counterValue = useSelector<AppRootStateType, number>(state => state.counter.counterValue)
+    let counterValue = useSelector<AppRootStateType, number>(state => state.settings.counterValue)
     let showMessage = useSelector<AppRootStateType, boolean>(state => state.settings.isMessage)
+    let startValueState = useSelector<AppRootStateType, number>(state => state.settings.startValue)
+
+    let [counter, setCounter] = useState(startValueState)
 
     let dispatch = useDispatch()
 
@@ -29,7 +30,7 @@ export const Counter = () => {
     return (
         <div className='appItem'>
             <div className={`displayField ${s.value}`}>{
-                showMessage ? <ShowMessages showMessage={showMessage}/> : counterValue
+                showMessage ? <ShowMessages /> : counterValue
                 }</div>
             <div className='buttonsField'>
                 <Button name={'inc'} onClickButtonHandler={onClickInc} isDisabled={false}/>
@@ -39,10 +40,6 @@ export const Counter = () => {
     );
 };
 
-type PropsDisplayType = {
-    showMessage: boolean
-}
-
-export const ShowMessages: FC<PropsDisplayType> = ({showMessage}) => {
+export const ShowMessages = () => {
     return <>set value</>
 }

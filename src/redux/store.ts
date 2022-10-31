@@ -1,16 +1,13 @@
 import { combineReducers, legacy_createStore as createStore} from 'redux'
-import {CounterReducer} from "./CounterReducer";
-import {SettingsReducer} from "./SettingsReducer";
+import {counterReducer} from "./counterReducer";
 
 export type AppRootStateType = ReturnType<typeof rootReducer>
 
 let rootReducer = combineReducers({
-    counter: CounterReducer,
-    settings: SettingsReducer
+    settings: counterReducer
 })
 
 export let store = createStore(rootReducer)
-
 
 
 

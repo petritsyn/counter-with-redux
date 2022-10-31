@@ -1,20 +1,22 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import {Button} from "../Button/Button";
 import s from './Settings.module.css'
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../redux/store";
-import {onMaxValueChange, onStartValueChange, setValue} from "../../redux/SettingsReducer";
+import {onMaxValueChange, onStartValueChange, setValue} from "../../redux/counterReducer";
 
 export const Settings = () => {
 
+    let [startValue, setStartValue] = useState(0)
+
     let maxValue = useSelector<AppRootStateType, number>(state => state.settings.maxValue)
-    let startValue = useSelector<AppRootStateType, number>(state => state.settings.startValue)
+    let startValueState = useSelector<AppRootStateType, number>(state => state.settings.startValue)
     let disableButton = useSelector<AppRootStateType, boolean>(state => state.settings.isDisableButton)
 
     let dispatch = useDispatch()
 
     const onClickButtonHandler = () => {
-        dispatch(setValue())
+        dispatch(setValue(startValue))
     }
 
     const onChangeInputMaxValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -23,6 +25,7 @@ export const Settings = () => {
 
     const onChangeInputStartValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
         dispatch(onStartValueChange(+e.currentTarget.value))
+        setStartValue(+e.currentTarget.value)
     }
 
     return (
@@ -30,7 +33,7 @@ export const Settings = () => {
             <div className='displayField'>
                 <div className={s.settings}>
                     <div><span>max value:</span><input type="number" value={maxValue} onChange={onChangeInputMaxValueHandler}/></div>
-                    <div><span>start value:</span><input type="number" value={startValue} onChange={onChangeInputStartValueHandler}/></div>
+                    <div><span>start value:</span><input type="number" value={startValueState} onChange={onChangeInputStartValueHandler}/></div>
                 </div>
             </div>
             <div className='buttonsField'>
