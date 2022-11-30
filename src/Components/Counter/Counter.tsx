@@ -9,9 +9,9 @@ export const Counter = () => {
 
     let counterValue = useSelector<AppRootStateType, number>(state => state.settings.counterValue)
     let showMessage = useSelector<AppRootStateType, boolean>(state => state.settings.isMessage)
-    let startValueState = useSelector<AppRootStateType, number>(state => state.settings.startValue)
+    let startValue = useSelector<AppRootStateType, number>(state => state.settings.startValue)
 
-    let [counter, setCounter] = useState(startValueState)
+    let [counter, setCounter] = useState(startValue)
 
     let dispatch = useDispatch()
 
@@ -23,8 +23,8 @@ export const Counter = () => {
 
     const onClickReset = () => {
         console.log('reset')
-        setCounter(0)
-        dispatch(resetCounter())
+        setCounter(startValue)
+        dispatch(resetCounter(counter))
     }
 
     return (

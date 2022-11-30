@@ -60,7 +60,7 @@ export const counterReducer = (state: InitialStateType = initialState, action: A
         case 'RESET-COUNTER': {
             return {
                 ...state,
-                counterValue: 0
+                counterValue: action.counterValue
             }
         }
 
@@ -97,8 +97,9 @@ export const increaseCounterValue = (counterValue: number) => {
     } as const
 }
 
-export const resetCounter = () => {
+export const resetCounter = (counterValue: number) => {
     return {
-        type: 'RESET-COUNTER'
+        type: 'RESET-COUNTER',
+        counterValue
     } as const
 }
