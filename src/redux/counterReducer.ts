@@ -1,105 +1,125 @@
 type InitialStateType = {
-    isDisableButton: boolean
     maxValue: number
     startValue: number
-    isMessage: boolean
+    isSetButtonDisabled: boolean
     counterValue: number
+    isMessageShow: boolean
+    incorrectValue: boolean
 }
-
-type ActionsTypes = ReturnType<typeof onMaxValueChange>
-    | ReturnType<typeof onStartValueChange>
-    | ReturnType<typeof setValue>
-    | ReturnType<typeof increaseCounterValue>
-    | ReturnType<typeof resetCounter>
+type ActionsTypes = ReturnType<typeof onMaxValueChangeAC>
+    | ReturnType<typeof onStartValueChangeAC>
+    | ReturnType<typeof buttonSetAC>
+    | ReturnType<typeof increaseCounterAC>
+    | ReturnType<typeof buttonResetAC>
+    | ReturnType<typeof incorrectValueAC>
+    | ReturnType<typeof disableButtonSetAC>
 
 const initialState = {
-    isDisableButton: true,
     maxValue: 0,
     startValue: 0,
-    isMessage: false,
-    counterValue: 0
+    counterValue: 0,
+    isSetButtonDisabled: true,
+    isMessageShow: false,
+    incorrectValue: false
 }
 
-export const counterReducer = (state: InitialStateType = initialState, action: ActionsTypes) => {
+export const counterReducer = (state: InitialStateType = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
-
-        case 'ON-MAX-VALUE-CHANGE': {
+        case "ON-MAX-VALUE-CHANGE":
             return {
                 ...state,
                 maxValue: action.maxValue,
-                isDisableButton: false,
-                isMessage: true
+                isSetButtonDisabled: false,
+                isMessageShow: true
             }
-        }
 
-        case "ON-START-VALUE-CHANGE": {
+        case "ON-START-VALUE-CHANGE":
             return {
                 ...state,
                 startValue: action.startValue,
-                isDisableButton: false,
-                isMessage: true
+                isSetButtonDisabled: false,
+                isMessageShow: true
             }
-        }
 
-        case "SET-VALUE": {
+        case "BUTTON-SET":
             return {
                 ...state,
-                isDisableButton: true,
-                isMessage: false,
-                counterValue: action.value
+                counterValue: state.startValue,
+                isMessageShow: false
             }
-        }
 
-        case 'INCREASE-COUNTER-VALUE': {
+        case "INCREASE-COUNTER":
             return {
                 ...state,
-                counterValue: action.counterValue + 1
+                counterValue: state.counterValue + 1
             }
-        }
 
-        case 'RESET-COUNTER': {
+        case "BUTTON-RESET":
             return {
                 ...state,
-                counterValue: action.counterValue
+                counterValue: state.startValue
+            }
+
+        case "INCORRECT-VALUE":
+            return {
+                ...state,
+                incorrectValue: action.isIncorrectValue
+            }
+
+        case "DISABLE-BUTTON-SET": {
+            return {
+                ...state,
+                isSetButtonDisabled: action.value
             }
         }
 
         default:
-            return state
+            return state;
     }
 }
 
-export const onMaxValueChange = (maxValue: number) => {
+export const onMaxValueChangeAC = (maxValue: number) => {
     return {
         type: 'ON-MAX-VALUE-CHANGE',
         maxValue
     } as const
 }
 
-export const onStartValueChange = (startValue: number) => {
+export const onStartValueChangeAC = (startValue: number) => {
     return {
         type: 'ON-START-VALUE-CHANGE',
         startValue
     } as const
 }
 
-export const setValue = (value: number) => {
+export const buttonSetAC = () => {
     return {
-        type: 'SET-VALUE',
+        type: 'BUTTON-SET'
+    } as const
+}
+
+export const increaseCounterAC = () => {
+    return {
+        type: 'INCREASE-COUNTER'
+    } as const
+}
+
+export const buttonResetAC = () => {
+    return {
+        type: 'BUTTON-RESET'
+    } as const
+}
+
+export const incorrectValueAC = (isIncorrectValue: boolean) => {
+    return {
+        type: 'INCORRECT-VALUE',
+        isIncorrectValue
+    } as const
+}
+
+export const disableButtonSetAC = (value: boolean) => {
+    return {
+        type: 'DISABLE-BUTTON-SET',
         value
-    } as const
-}
-
-export const increaseCounterValue = (counterValue: number) => {
-    return {
-        type: 'INCREASE-COUNTER-VALUE',
-        counterValue
-    } as const
-}
-
-export const resetCounter = (counterValue: number) => {
-    return {
-        type: 'RESET-COUNTER',
-        counterValue
     } as const
 }

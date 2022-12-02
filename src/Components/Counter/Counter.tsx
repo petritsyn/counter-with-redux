@@ -1,45 +1,55 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button} from "../Button/Button";
 import s from './Counter.module.css'
 import {useDispatch, useSelector} from "react-redux";
-import {increaseCounterValue, resetCounter} from "../../redux/counterReducer";
 import {AppRootStateType} from "../../redux/store";
+import {buttonResetAC, increaseCounterAC} from "../../redux/counterReducer";
+import {Display} from "./Display/Display";
+
 
 export const Counter = () => {
 
-    let counterValue = useSelector<AppRootStateType, number>(state => state.settings.counterValue)
-    let showMessage = useSelector<AppRootStateType, boolean>(state => state.settings.isMessage)
-    let startValue = useSelector<AppRootStateType, number>(state => state.settings.startValue)
+    let dispatch = useDispatch();
 
-    let [counter, setCounter] = useState(startValue)
+    let counterValueStore = useSelector<AppRootStateType, number>(state => state.counter.counterValue);
+    let maxValueStore = useSelector<AppRootStateType, number>(state => state.counter.maxValue);
+    let isIncorrectValue = useSelector<AppRootStateType, boolean>(state => state.counter.incorrectValue);
+    let isMessageShow = useSelector<AppRootStateType, boolean>(state => state.counter.isMessageShow);
 
-    let dispatch = useDispatch()
+    let [isIncDisabled, setIsIncDisabled] = useState(false);
+    let [isResetDisabled, setIsResetDisabled] = useState(false);
 
-    const onClickInc = () => {
-        console.log('inc')
-        setCounter(counter + 1)
-        dispatch(increaseCounterValue(counter))
+    useEffect(() => {
+        if (isIncorrectValue || isMessageShow) {
+            setIsIncDisabled(true)
+            setIsResetDisabled(true)
+        } else {
+            setIsIncDisabled(false)
+            setIsResetDisabled(false)
+        }
+    }, [isIncorrectValue, isMessageShow, counterValueStore])
+
+    useEffect(() => {
+        if (counterValueStore >= maxValueStore && maxValueStore > 0) {
+            setIsIncDisabled(true)
+        }
+    }, [maxValueStore, counterValueStore])
+
+    const onClickIncButtonHandler = () => {
+        dispatch(increaseCounterAC())
     }
 
-    const onClickReset = () => {
-        console.log('reset')
-        setCounter(startValue)
-        dispatch(resetCounter(counter))
+    const onClickResetButtonHandler = () => {
+        dispatch(buttonResetAC())
     }
 
     return (
         <div className='appItem'>
-            <div className={`displayField ${s.value}`}>{
-                showMessage ? <ShowMessages /> : counterValue
-                }</div>
+            <div className={`displayField ${s.value}`}>{<Display isIncorrectValue={isIncorrectValue} counter={counterValueStore} isMessageShow={isMessageShow}/>}</div>
             <div className='buttonsField'>
-                <Button name={'inc'} onClickButtonHandler={onClickInc} isDisabled={false}/>
-                <Button name={'reset'} onClickButtonHandler={onClickReset} isDisabled={false}/>
+                <Button name={'inc'} onClickButton={onClickIncButtonHandler} isDisabled={isIncDisabled}/>
+                <Button name={'reset'} onClickButton={onClickResetButtonHandler} isDisabled={isResetDisabled}/>
             </div>
         </div>
     );
 };
-
-export const ShowMessages = () => {
-    return <>set value</>
-}

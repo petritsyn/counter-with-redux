@@ -1,43 +1,66 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useEffect} from 'react';
 import {Button} from "../Button/Button";
 import s from './Settings.module.css'
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../redux/store";
-import {onMaxValueChange, onStartValueChange, setValue} from "../../redux/counterReducer";
+import {
+    onMaxValueChangeAC,
+    onStartValueChangeAC,
+    buttonSetAC,
+    disableButtonSetAC,
+    incorrectValueAC
+} from "../../redux/counterReducer";
+import {Input} from "./Input/Input";
 
 export const Settings = () => {
 
-    let [startValue, setStartValue] = useState(0)
+    let dispatch = useDispatch();
 
-    let maxValue = useSelector<AppRootStateType, number>(state => state.settings.maxValue)
-    let startValueState = useSelector<AppRootStateType, number>(state => state.settings.startValue)
-    let disableButton = useSelector<AppRootStateType, boolean>(state => state.settings.isDisableButton)
+    let maxValueStore = useSelector<AppRootStateType, number>(state => state.counter.maxValue);
+    let startValueStore = useSelector<AppRootStateType, number>(state => state.counter.startValue);
+    let isSetButtonDisabled = useSelector<AppRootStateType, boolean>(state => state.counter.isSetButtonDisabled);
+    let isIncorrectValue = useSelector<AppRootStateType, boolean>(state => state.counter.incorrectValue);
 
-    let dispatch = useDispatch()
-
-    const onClickButtonHandler = () => {
-        dispatch(setValue(startValue))
+    const onMaxValueChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        dispatch(onMaxValueChangeAC(+e.currentTarget.value))
     }
 
-    const onChangeInputMaxValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        dispatch(onMaxValueChange(+e.currentTarget.value))
+    const onStartValueChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        dispatch(onStartValueChangeAC(+e.currentTarget.value))
     }
 
-    const onChangeInputStartValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        dispatch(onStartValueChange(+e.currentTarget.value))
-        setStartValue(+e.currentTarget.value)
+    const setButtonHandler = () => {
+        dispatch(buttonSetAC())
     }
+
+    useEffect(() =>{
+        if (isIncorrectValue) {
+            dispatch(disableButtonSetAC(true))
+        } else {
+            dispatch(disableButtonSetAC(false))
+        }
+    }, [isIncorrectValue])
+
+    useEffect(() => {
+        if (maxValueStore < 0 || startValueStore < 0 || startValueStore > maxValueStore) {
+            dispatch(disableButtonSetAC(true))
+            dispatch(incorrectValueAC(true))
+        } else {
+            dispatch(disableButtonSetAC(false))
+            dispatch(incorrectValueAC(false))
+        }
+    }, [maxValueStore, startValueStore])
 
     return (
         <div className='appItem'>
             <div className='displayField'>
                 <div className={s.settings}>
-                    <div><span>max value:</span><input type="number" value={maxValue} onChange={onChangeInputMaxValueHandler}/></div>
-                    <div><span>start value:</span><input type="number" value={startValueState} onChange={onChangeInputStartValueHandler}/></div>
+                    <div><span>max value:</span><Input value={maxValueStore} onChange={onMaxValueChangeHandler} isIncorrectValue={isIncorrectValue}/></div>
+                    <div><span>start value:</span><Input value={startValueStore} onChange={onStartValueChangeHandler} isIncorrectValue={isIncorrectValue}/></div>
                 </div>
             </div>
             <div className='buttonsField'>
-                <Button name={'set'} onClickButtonHandler={onClickButtonHandler} isDisabled={disableButton}/>
+                <Button name={'set'} onClickButton={setButtonHandler} isDisabled={isSetButtonDisabled}/>
             </div>
         </div>
     );

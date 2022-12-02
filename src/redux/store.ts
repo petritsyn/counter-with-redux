@@ -4,7 +4,7 @@ import {counterReducer} from "./counterReducer";
 export type AppRootStateType = ReturnType<typeof rootReducer>
 
 let rootReducer = combineReducers({
-    settings: counterReducer
+    counter: counterReducer
 })
 
 export let store = createStore(rootReducer)

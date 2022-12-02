@@ -3,14 +3,14 @@ import s from './Button.module.css'
 
 type PropsType = {
     name: string
-    onClickButtonHandler: () => void
+    onClickButton: () => void
     isDisabled: boolean
 }
 
-export const Button: FC<PropsType> = ({name, onClickButtonHandler, isDisabled}) => {
+export const Button: FC<PropsType> = ({name, onClickButton, isDisabled}) => {
     return (
         <>
-            <button className={s.button} onClick={onClickButtonHandler} disabled={isDisabled}>{name}</button>
+            <button className={s.button} onClick={onClickButton} disabled={isDisabled}>{name}</button>
         </>
     );
 };
